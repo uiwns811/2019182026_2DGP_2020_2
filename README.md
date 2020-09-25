@@ -10,53 +10,51 @@
   
   <div>
 <img width = "200" src = "https://user-images.githubusercontent.com/71070963/94255201-d8f47a00-ff62-11ea-8f43-88b41b74b836.jpg">
- <img width = "200" src = "https://user-images.githubusercontent.com/71070963/94255192-d7c34d00-ff62-11ea-990d-2f0e84a8efd5.png">
-  
-
-
-
-     
+ <img width = "200" src = "https://user-images.githubusercontent.com/71070963/94255192-d7c34d00-ff62-11ea-990d-2f0e84a8efd5.png">  
+	
+	
+	
 2. Game State의 수 및 각각의 이름
 	- 총 Game state의 수는 4개이다.
 	- start
 	- running
 	- gameover
-	- ending
-
-    
-    
-    
+	- ending  
+	
+	
 3. 각 GameState 별 설명
 	1) start
 	- 본격적인 게임 시작 전 로딩화면으로, 게임을 시작하라는 입력을 받는다.
 	- 게임 제목, Game Start, Help
 	- 마우스 입력을 받는다. Help를 누르면 간단한 조작법을 출력한다.
-	- 마우스 왼쪽 버튼으로 Game Start를 누르면 runnning state로 이동한다.
-	     
-	     
+	- 마우스 왼쪽 버튼으로 Game Start를 누르면 runnning state로 이동한다.     
+	
+	
 	2) running
 	- 게임이 진행되는 state이다.
 	- object, 계단
 	- 마우스 왼쪽 버튼 입력으로 계단을 오른다.  스페이스바 입력으로 객체의 방향을 전환한다.
 	- 이어지는 계단이 없는데 계단을 오른다면 계단에서 떨어지고, gameover state로 이동한다. 
-    또한 hp가 모두 소모되면 gameover state로 이동한   다. 정해진 계단을 모두 올라가면 ending state로 이동한다.
-         
-	 
+    또한 hp가 모두 소모되면 gameover state로 이동한   다. 정해진 계단을 모두 올라가면 ending state로 이동한다.   
+    
+    
+    
 	3) gameover
 	- 계단에서 떨어졌을 때, hp가 모두 소모되었을 때 실행되는 화면이다.
 	- object, score, Retry
 	- 마우스 왼쪽 버튼으로 Retry를 클릭하면 게임을 다시 시작한다.
-	- Retry를 클릭하면 running state로 이동하여 게임을 다시 시작한다.
-	     
-	     
+	- Retry를 클릭하면 running state로 이동하여 게임을 다시 시작한다.   
+	
+	
+	
 	4) ending
 	- 주어진 계단을 모두 오르면 실행되는 화면이다.
 	- object, score, NewGame, Bye
 	- 마우스 왼쪽 버튼으로 입력받는다.
-	- NewGame을 클릭하면 running state로 이동하여 다시 게임을 시작한다. Bye를 클릭하면 게임을 종료한다.
-    
-    
-
+	- NewGame을 클릭하면 running state로 이동하여 다시 게임을 시작한다. Bye를 클릭하면 게임을 종료한다.   
+	
+	
+	
 4. 필요한 기술
 	- 좌표값 처리, 움직임 철디
 	- 사운드 삽입, 화면에 배경이 자연스럽게 움직이도록 구현하는 법
