@@ -23,35 +23,35 @@
 	
 	
 3. 각 GameState 별 설명
-	1) start
-	- 본격적인 게임 시작 전 로딩화면으로, 게임을 시작하라는 입력을 받는다.
-	- 게임 제목, Game Start, Help
-	- 마우스 입력을 받는다. Help를 누르면 간단한 조작법을 출력한다.
-	- 마우스 왼쪽 버튼으로 Game Start를 누르면 runnning state로 이동한다.     
+	- start
+		* 본격적인 게임 시작 전 로딩화면으로, 게임을 시작하라는 입력을 받는다.
+		* 게임 제목, Game Start, Help
+		* 마우스 입력을 받는다. Help를 누르면 간단한 조작법을 출력한다.
+		* 마우스 왼쪽 버튼으로 Game Start를 누르면 runnning state로 이동한다.     
 	
 	
-	2) running
-	- 게임이 진행되는 state이다.
-	- object, 계단
-	- 마우스 왼쪽 버튼 입력으로 계단을 오른다.  스페이스바 입력으로 객체의 방향을 전환한다.
-	- 이어지는 계단이 없는데 계단을 오른다면 계단에서 떨어지고, gameover state로 이동한다. 
+	- running
+		* 게임이 진행되는 state이다.
+		* object, 계단
+		* 마우스 왼쪽 버튼 입력으로 계단을 오른다.  스페이스바 입력으로 객체의 방향을 전환한다.
+		* 이어지는 계단이 없는데 계단을 오른다면 계단에서 떨어지고, gameover state로 이동한다. 
     또한 hp가 모두 소모되면 gameover state로 이동한   다. 정해진 계단을 모두 올라가면 ending state로 이동한다.   
     
     
     
-	3) gameover
-	- 계단에서 떨어졌을 때, hp가 모두 소모되었을 때 실행되는 화면이다.
-	- object, score, Retry
-	- 마우스 왼쪽 버튼으로 Retry를 클릭하면 게임을 다시 시작한다.
-	- Retry를 클릭하면 running state로 이동하여 게임을 다시 시작한다.   
+	- gameover
+		* 계단에서 떨어졌을 때, hp가 모두 소모되었을 때 실행되는 화면이다.
+		* object, score, Retry
+		* 마우스 왼쪽 버튼으로 Retry를 클릭하면 게임을 다시 시작한다.
+		* Retry를 클릭하면 running state로 이동하여 게임을 다시 시작한다.   
 	
 	
 	
-	4) ending
-	- 주어진 계단을 모두 오르면 실행되는 화면이다.
-	- object, score, NewGame, Bye
-	- 마우스 왼쪽 버튼으로 입력받는다.
-	- NewGame을 클릭하면 running state로 이동하여 다시 게임을 시작한다. Bye를 클릭하면 게임을 종료한다.   
+	- ending
+		* 주어진 계단을 모두 오르면 실행되는 화면이다.
+		* object, score, NewGame, Bye
+		* 마우스 왼쪽 버튼으로 입력받는다.
+		* NewGame을 클릭하면 running state로 이동하여 다시 게임을 시작한다. Bye를 클릭하면 게임을 종료한다.   
 	
 	
 	
