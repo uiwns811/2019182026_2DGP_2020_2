@@ -13,12 +13,12 @@ class Player:
         self.delta = 0, 0
         self.speed = 200
         # 게임 시작 전 character_standard와 character_clock이 번갈아 나타나도록 구현
-        self.image = gfw.image.load(gobj.res('/character_standard.png'))
+        self.image = gfw.image.load(gobj.res('/character_std.png'))
         # self.target_image = gfw.image.load(gobj.res('/character_clock.png'))
         self.time = 0
         self.fidx = 0
         self.action = 2
-        self.mag = 1
+        self.mag = 1.0
         self.roll = 0
 
     def draw(self):
