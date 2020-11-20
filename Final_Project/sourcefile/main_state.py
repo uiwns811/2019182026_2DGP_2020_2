@@ -1,6 +1,6 @@
 import gfw
 from pico2d import *
-from background import *
+import background
 from stairs import Stair
 from player import Player
 import stairs_gen
@@ -11,11 +11,16 @@ canvas_width = 700
 canvas_height = 1000
 
 def build_world():
+    global player
     gfw.world.init(['bg', 'stairs', 'player'])
+
+    generate_player()
     
-    global bg
-    bg = FixedBackground('/background.png')
-    gfw.world.add(gfw.layer.bg, bg)
+    # global bg
+    # bg = FixedBackground('/background.png')
+    # gfw.world.add(gfw.layer.bg, bg)
+    background.init(player)
+    gfw.world.add(gfw.layer.bg, background)
 
     global font
     font = gfw.font.load('../res/font' + '/ARCADECLASSIC.TTF', 40)
@@ -23,13 +28,13 @@ def build_world():
 def generate_player():
     global player, bg
     player = Player()
-    player.bg = bg
+    player.bg = background
     gfw.world.add(gfw.layer.player, player)
   
 def generate_stair():    
     global stairs
     for s in range (0, 13):
-        stairs = stairs_gen.generate_stair()
+        stairs = stairs_gen.update()
     print("generate_stair")
     
     # global stairs, bg
@@ -45,14 +50,13 @@ def enter():
     center = get_canvas_width() // 2, get_canvas_height() // 2
 
     build_world()
-    generate_player()
-    # generate_stair()
+    # generate_player()
+    generate_stair()
     # for e in range (0, 20):
 
 def update():
     #generate_stair()
     gfw.world.update()
-    stairs = stairs_gen.generate_stair()
     time.sleep(1)
     sc = gfw.world.count_at(gfw.layer.stairs)
     print('sc : ', sc)
@@ -81,9 +85,11 @@ def handle_event(e):
       #  return
 
 def remove():
-    if gfw.world.count_at(gfw.layer.stairs) > 20:
-        for e in range(0, 20):
-            gfw.world.clear_at(gfw.layer.stairs)
+    if gfw.world.count_at(gfw.layer.stairs) > 12:
+        gfw.world.remove(stairs)
+        gfw.world.empty_trashcan()
+        print('================================================')
+        print(gfw.world.count_at(gfw.layer.stairs))
         print('================================================')
 
 def exit():
