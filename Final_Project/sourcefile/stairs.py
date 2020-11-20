@@ -31,7 +31,6 @@ class Stair:
             self.fcount = self.image.w // self.image.h
         self.width = self.image.w // self.fcount
         self.height = self.image.h
-        self.stair_level = 0
     
     # def update(self):
     

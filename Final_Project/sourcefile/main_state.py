@@ -31,11 +31,14 @@ def generate_player():
     player.bg = background
     gfw.world.add(gfw.layer.player, player)
   
-def generate_stair():    
-    global stairs
-    for s in range (0, 13):
-        stairs = stairs_gen.update()
+def generate_stair():
+    print('*****************************hi*************************')    
+
+    # stair_gen.init()    global stairs
+    # for s in range (0, 13):
+    stairs = stairs_gen.update()
     print("generate_stair")
+
     
     # global stairs, bg
     # for e in range(0, 15):
@@ -76,7 +79,7 @@ def handle_event(e):
     elif e.type == SDL_KEYDOWN:
         if e.key == SDLK_ESCAPE: 
             gfw.pop()
-        elif e.key == SDL_KEYDOWN:
+        elif e.key == SDLK_DOWN:
             generate_stair()
 
     if player.handle_event(e):
@@ -85,8 +88,9 @@ def handle_event(e):
       #  return
 
 def remove():
+    global stairs
     if gfw.world.count_at(gfw.layer.stairs) > 12:
-        gfw.world.remove(stairs)
+        gfw.world.remove(gfw.layer.stairs)
         gfw.world.empty_trashcan()
         print('================================================')
         print(gfw.world.count_at(gfw.layer.stairs))

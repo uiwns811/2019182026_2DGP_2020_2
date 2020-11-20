@@ -4,10 +4,16 @@ from stairs import *
 import random
 import gobj
 
+STAIRS_COUNT = 13
+
 def generate_stair():
 	stair = Stair()
 	gfw.world.add(gfw.layer.stairs, stair)
 	print('creating stairs')
+
+def update():
+	while gfw.world.count_at(gfw.layer.stairs) < STAIRS_COUNT:
+		generate_stair()
 
 # def generate_stair():
 # 	global STAIR_HEIGHT, cnt, stair_level
