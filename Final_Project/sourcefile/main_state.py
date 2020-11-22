@@ -17,11 +17,12 @@ def build_world():
     gfw.world.init(['bg', 'stairs', 'player'])
 
     generate_player()
+    generate_stair()
     
     # global bg
     # bg = FixedBackground('/background.png')
     # gfw.world.add(gfw.layer.bg, bg)
-    background.init(player)
+    background.init()
     gfw.world.add(gfw.layer.bg, background)
 
     global font
