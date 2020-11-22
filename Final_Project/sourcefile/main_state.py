@@ -3,7 +3,9 @@ from pico2d import *
 import background
 from stairs import Stair
 from player import Player
+from stair import *
 import stairs_gen
+import stair_gen
 import gobj
 import time
 
@@ -36,7 +38,7 @@ def generate_stair():
 
     # stair_gen.init()    global stairs
     # for s in range (0, 13):
-    stairs = stairs_gen.update()
+    stairs = stair_gen.update()
     print("generate_stair")
 
     
@@ -60,7 +62,7 @@ def enter():
 def update():
     #generate_stair()
     gfw.world.update()
-    time.sleep(1)
+    # time.sleep(1)
     sc = gfw.world.count_at(gfw.layer.stairs)
     print('sc : ', sc)
     remove()
@@ -72,7 +74,6 @@ def draw():
     font.draw(20, canvas_height - 45, "hello")
 
 def handle_event(e):
-    global player, stairs
     # prev_dx = boy.dx
     if e.type == SDL_QUIT:
         gfw.quit()
@@ -81,11 +82,12 @@ def handle_event(e):
             gfw.pop()
         elif e.key == SDLK_DOWN:
             generate_stair()
+    if e.type == SDL_MOUSEBUTTONDOWN:
+        for s in gfw.world.objects_at(gfw.layer.stairs):
+            Stair.down_pos(s)
 
-    if player.handle_event(e):
-        return
-    #if stair.handle_event(e):
-      #  return
+    # if stairs.handle_event(e):
+    #     return
 
 def remove():
     global stairs
