@@ -20,9 +20,13 @@ class Player:
         self.action = 2
         self.mag = 1.0
         self.roll = 0
+        self.left = self.pos[0] - self.image.w // 2
+        self.bottom = self.pos[1] - self.image.h // 2
+        self.right = self.left + self.image.w
+        self.top = self.bottom + 3
 
     def draw(self):
-        pos = self.bg.to_screen(self.pos)
+        # pos = self.bg.to_screen(self.pos)
         self.image.draw(*self.pos)
 
     def update(self):
@@ -32,15 +36,18 @@ class Player:
         y += dy * self.speed * self.mag * gfw.delta_time
 
         px,py = x,y
-        bg_l, bg_b, bg_r, bg_t = self.bg.get_boundary()
-        x = clamp(bg_l, x, bg_r)
-        y = clamp(bg_b, y, bg_t)
+        #bg_l, bg_b, bg_r, bg_t = self.bg.get_boundary()
+        #x = clamp(bg_l, x, bg_r)
+        #y = clamp(bg_b, y, bg_t)
 
         done = False
 
         self.time += gfw.delta_time
         frame = self.time * 15
         self.fidx = int(frame) % 5
+
+    def get_bb(self):
+        return self.left, self.bottom, self.right, self.top
 
     def handle_event(self, e):
     	pair = (e.type, e.key)

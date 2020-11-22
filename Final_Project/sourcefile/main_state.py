@@ -1,11 +1,10 @@
 import gfw
 from pico2d import *
 import background
-from stairs import Stair
 from player import Player
 from stair import *
-import stairs_gen
 import stair_gen
+from coins import *
 import gobj
 import time
 
@@ -14,7 +13,7 @@ canvas_height = 1000
 
 def build_world():
     global player
-    gfw.world.init(['bg', 'stairs', 'player'])
+    gfw.world.init(['bg', 'stairs', 'coins', 'player'])
 
     generate_player()
     generate_stair()
@@ -25,6 +24,10 @@ def build_world():
     background.init()
     gfw.world.add(gfw.layer.bg, background)
 
+    global coins
+    coins = Coins(3, 3)
+    gfw.world.add(gfw.layer.coins, coins)
+
     global font
     font = gfw.font.load('../res/font' + '/ARCADECLASSIC.TTF', 40)
 
@@ -33,6 +36,8 @@ def generate_player():
     player = Player()
     player.bg = background
     gfw.world.add(gfw.layer.player, player)
+    bb = player.get_bb()
+    print('player =', bb)
   
 def generate_stair():
     print('*****************************hi*************************')    
@@ -41,6 +46,10 @@ def generate_stair():
     # for s in range (0, 13):
     stairs = stair_gen.update()
     print("generate_stair")
+
+    for s in gfw.world.objects_at(gfw.layer.stairs):
+        bb = Stair.get_bb(s)
+        print(bb)
 
     
     # global stairs, bg
@@ -64,8 +73,7 @@ def update():
     #generate_stair()
     gfw.world.update()
     # time.sleep(1)
-    sc = gfw.world.count_at(gfw.layer.stairs)
-    print('sc : ', sc)
+
     remove()
     # stairs_gen.update()
 
@@ -85,19 +93,33 @@ def handle_event(e):
             generate_stair()
     if e.type == SDL_MOUSEBUTTONDOWN:
         for s in gfw.world.objects_at(gfw.layer.stairs):
-            Stair.down_pos(s)
+            check_stairs(s)
+            if check_stairs(s) == True:
+                for s in gfw.world.objects_at(gfw.layer.stairs):
+                    Stair.move_pos(s)
+            # bb = Stair.get_bb(s)
+            # print(bb)
+            # sc = gfw.world.count_at(gfw.layer.stairs)
+            # print('sc : ', sc)
 
     # if stairs.handle_event(e):
     #     return
+
+def check_stairs(e):
+    if gobj.collides_box(player, e):
+        print('Stairs Collision', e)
+        return True;
+    else:
+        return False;
 
 def remove():
     global stairs
     if gfw.world.count_at(gfw.layer.stairs) > 12:
         gfw.world.remove(gfw.layer.stairs)
         gfw.world.empty_trashcan()
-        print('================================================')
-        print(gfw.world.count_at(gfw.layer.stairs))
-        print('================================================')
+        # print('================================================')
+        # print(gfw.world.count_at(gfw.layer.stairs))
+        # print('================================================')
 
 def exit():
     pass

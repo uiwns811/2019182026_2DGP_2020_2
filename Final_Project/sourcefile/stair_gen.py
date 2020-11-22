@@ -8,7 +8,6 @@ STAIR_COUNT = 13
 SPEED_PPS = 3000
 MAG_SPEED = 0.15
 stair_level = 0
-stair_cnt = 0
 STAIR_WIDTH = 118
 STAIR_HEIGHT = 65
 
@@ -31,7 +30,7 @@ def generate():
     gfw.world.add(gfw.layer.stairs, s)
 
 def get_coords():           # 좌표를 생성하는 함수를 만들자.. missile말고 item도 만들건데 생성되는 x, y, dx, dy를 결정하는게 따로 필요.
-    global stair_level, stair_cnt, prev_index, cur_index
+    global stair_level, prev_index, cur_index
     randcnt = random.randint(0, 1)      # 계단의 증감폭 랜덤값으로 설정
         # i = random.randint(0, 15)
         # x = i % 4
