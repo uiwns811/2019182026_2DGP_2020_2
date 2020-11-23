@@ -25,7 +25,7 @@ def build_world():
     gfw.world.add(gfw.layer.bg, background)
 
     global coins
-    coins = Coins(200, 300)
+    coins = Coins((300, 400), (15, 15))
     gfw.world.add(gfw.layer.coins, coins)
 
     global font

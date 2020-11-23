@@ -3,26 +3,31 @@ import gfw
 import gobj
 import random
 
-COIN_WIDDTH = 85
-COIN_HEIGHT = 80
-
-def get_coin_rect(index):
-	ix, iy = index % 30, index // 30
-
 class Coins:
-	def __init__(self, x, y):
-		self.x, self.y = x, y
+	FPS =100
+	def __init__(self, pos, delta):
+		self.pos = pos
+		self.delta = delta
 		self.image = gfw.image.load(gobj.res('/coins.png'))
-		index = random.randint(3, 60)
-		self.rect = get_coin_rect(index)
-		self.mag = 1
+		self.time = get_time()
+		self.size = self.image.h
+		self.radius = self.size // 2
+		self.bb_l = -self.size
+		self.bb_b = -self.size
+		self.bb_r = get_canvas_width() + self.size
+		self.bb_t = get_canvas_height() + self.size
+		self.fcount = self.image.w // self.image.h
 		# self.left = self.x - gfw.
 
 	def update(self):
 		pass
 
 	def draw(self):
-		self.image.clip_draw(0, 0, 80, 80, self.x, self.y)
+		elapsed = get_time() - self.time
+		fidx = round(elapsed + Coins.FPS) % self.fcount
+		size = self.image.h
+		rect = fidx * size, 0, size, size
+		self.image.clip_draw(*rect, *self.pos, self.size, self.size)
 
 	def move(self, dx):
 		self.x += dx
