@@ -158,7 +158,7 @@
 ---
 
 #### 10. 주별 Commit 수
-	
+	![2차발표_주별커밋수](https://user-images.githubusercontent.com/71070963/99957578-45f18800-2dcb-11eb-99d0-213a3653120d.png)
 
 
 ---
