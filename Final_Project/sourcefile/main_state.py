@@ -7,9 +7,11 @@ import stair_gen
 from coins import *
 import gobj
 import time
+import random
+import collision
 
 canvas_width = 700
-canvas_height = 1000
+canvas_height = 900
 
 def build_world():
     global player
@@ -23,10 +25,6 @@ def build_world():
     # gfw.world.add(gfw.layer.bg, bg)
     background.init()
     gfw.world.add(gfw.layer.bg, background)
-
-    global coins
-    coins = Coins((300, 400), (15, 15))
-    gfw.world.add(gfw.layer.coins, coins)
 
     global font
     font = gfw.font.load('../res/font' + '/ARCADECLASSIC.TTF', 40)
@@ -47,9 +45,14 @@ def generate_stair():
     stairs = stair_gen.update()
     print("generate_stair")
 
-    for s in gfw.world.objects_at(gfw.layer.stairs):
-        bb = Stair.get_bb(s)
-        print(bb)
+    # global coins
+    # sc = random.randint(1, 5)
+    # if sc == 3:
+    #     coins = Coins((stairs.x, stairs.y), (15, 15))
+    #     gfw.world.add(gfw.layer.coins, coins)
+    # for s in gfw.world.objects_at(gfw.layer.stairs):
+    #     bb = Stair.get_bb(s)
+    #     print(bb)
 
     
     # global stairs, bg
@@ -79,7 +82,7 @@ def update():
 
 def draw():
     gfw.world.draw()
-    # gobj.draw_collision_box()
+    gobj.draw_collision_box()
     font.draw(20, canvas_height - 45, "hello")
 
 def handle_event(e):
@@ -93,10 +96,12 @@ def handle_event(e):
             generate_stair()
     if e.type == SDL_MOUSEBUTTONDOWN:
         for s in gfw.world.objects_at(gfw.layer.stairs):
-            check_stairs(s)
-            if check_stairs(s) == True:
-                for s in gfw.world.objects_at(gfw.layer.stairs):
-                    Stair.move_pos(s)
+            if s.ylevel == 3:
+                # Stair.move_pos(s)
+                check_stairs(s)
+                if check_stairs(s) == True:
+                    for s in gfw.world.objects_at(gfw.layer.stairs):
+                        Stair.move_pos(s)
             # bb = Stair.get_bb(s)
             # print(bb)
             # sc = gfw.world.count_at(gfw.layer.stairs)
