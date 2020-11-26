@@ -11,7 +11,7 @@ import random
 import collision
 
 canvas_width = 700
-canvas_height = 900
+canvas_height = 1000
 
 def build_world():
     global player
@@ -86,6 +86,7 @@ def draw():
     font.draw(20, canvas_height - 45, "hello")
 
 def handle_event(e):
+    c_level = 4
     # prev_dx = boy.dx
     if e.type == SDL_QUIT:
         gfw.quit()
@@ -96,12 +97,14 @@ def handle_event(e):
             generate_stair()
     if e.type == SDL_MOUSEBUTTONDOWN:
         for s in gfw.world.objects_at(gfw.layer.stairs):
-            if s.ylevel == 3:
+            if s.ylevel == c_level:
                 # Stair.move_pos(s)
                 check_stairs(s)
                 if check_stairs(s) == True:
-                    for s in gfw.world.objects_at(gfw.layer.stairs):
-                        Stair.move_pos(s)
+                    for sa in gfw.world.objects_at(gfw.layer.stairs):
+                        Stair.move_pos(sa)
+                    c_level += 1
+
             # bb = Stair.get_bb(s)
             # print(bb)
             # sc = gfw.world.count_at(gfw.layer.stairs)

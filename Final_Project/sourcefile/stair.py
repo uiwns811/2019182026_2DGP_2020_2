@@ -8,7 +8,7 @@ STAIR_HEIGHT = 72
 # JSON 사용해보자....에휴 이게 뭐하는 짓거리임
 
 class Stair:
-    def __init__(self, pos, ylevel): #생성시 pos, delta를 넘겨줄 것
+    def __init__(self, pos, ylevel, xdirection): #생성시 pos, delta를 넘겨줄 것
         self.x, self.y = pos
         self.image = gfw.image.load('../res/image/stairs.png')
         self.radius = self.image.w // 2
@@ -17,6 +17,7 @@ class Stair:
         self.right = self.left + self.image.w
         self.top = self.bottom + self.image.h
         self.ylevel = ylevel
+        self.xdirection = xdirection
         # self.bb_l = -self.image.w
         # self.bb_b = -self.image.h
         # self.bb_r = get_canvas_width() + self.image.w
@@ -38,7 +39,11 @@ class Stair:
         return self.left, self.bottom, self.right, self.top
 
     def move_pos(self):
-        self.y -= self.image.w
+        if self.xdirection == 0:
+            self.x += self.image.w
+        else:
+            self.x -= self.image.w
+        self.y -= self.image.h
         self.left = self.x - self.image.w // 2
         self.bottom = self.y - self.image.h // 2
         self.right = self.left + self.image.w
