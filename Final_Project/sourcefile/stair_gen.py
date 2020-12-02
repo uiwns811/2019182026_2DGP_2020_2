@@ -34,23 +34,26 @@ def get_coords():           # 좌표를 생성하는 함수를 만들자.. missi
     global stair_level, prev_index, cur_index
     image = gfw.image.load('../res/image/stairs.png')
     xdirection = random.randint(0, 1)      # 계단의 생성 방향 결정
+    if stair_level == 3:
+        cur_index = 3
+
     if xdirection == 0:
         if prev_index < 1:      # 더이상 왼쪽으로 갈 수 없는 경우
             cur_index = prev_index + 1
-            prev_index += 1
+            prev_index = cur_index
             xdirection = 1
         else:
             cur_index = prev_index - 1
-            prev_index -= 1
+            prev_index = cur_index
 
     if xdirection == 1:
         if prev_index > 3:      # 더이상 오른쪽으로 갈 수 없는 경우
             cur_index = prev_index - 1
-            prev_index -= 1
+            prev_index = cur_index 
             xdirection = 0
         else:
             cur_index = prev_index + 1
-            prev_index += 1
+            prev_index = cur_index
 
     x = (cur_index) * image.w     # x의 화면상의 위치 표시
     y = stair_level * image.h + 120  # y의 화면상의 위치 표시

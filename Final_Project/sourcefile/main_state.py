@@ -101,8 +101,13 @@ def handle_event(e):
                 # Stair.move_pos(s)
                 check_stairs(s)
                 if check_stairs(s) == True:
-                    for sa in gfw.world.objects_at(gfw.layer.stairs):
-                        Stair.move_pos(sa)
+                    print(Stair.check_x(s))
+                    if Stair.check_x(s) == moveLeft:
+                        for sa in gfw.world.objects_at(gfw.layer.stairs):
+                            Stair.move_pos(sa, moveLeft)
+                    else:
+                        for sa in gfw.world.objects_at(gfw.layer.stairs):
+                            Stair.move_pos(sa, moveRight)
                     c_level += 1
 
             # bb = Stair.get_bb(s)

@@ -4,7 +4,8 @@ import gfw
 MOVE_PPS = 200      # 초당 200픽셀로 움직임
 STAIR_WIDTH = 132
 STAIR_HEIGHT = 72
-
+moveLeft = 0
+moveRight = 1
 # JSON 사용해보자....에휴 이게 뭐하는 짓거리임
 
 class Stair:
@@ -35,14 +36,21 @@ class Stair:
         return False
 
     def get_bb(self):
-        print(self.left, self.bottom, self.right, self.top)
+        # print(self.left, self.bottom, self.right, self.top)
         return self.left, self.bottom, self.right, self.top
 
-    def move_pos(self):
+    def check_x(self):
+        print('djihfskkjshkd')        
         if self.xdirection == 0:
-            self.x += self.image.w
+            return moveLeft
         else:
+            return moveRight
+
+    def move_pos(self, movedirection):
+        if movedirection == moveLeft:
             self.x -= self.image.w
+        else:
+            self.x += self.image.w
         self.y -= self.image.h
         self.left = self.x - self.image.w // 2
         self.bottom = self.y - self.image.h // 2
