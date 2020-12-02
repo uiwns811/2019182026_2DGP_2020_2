@@ -21,9 +21,10 @@ def start_game():
     global state
     if state != STATE_GAME_OVER:
         return
+    gfw.world.remove(highscore)
     state = STATE_IN_GAME
     global hp
-    hp = 10
+    hp = 100
 
 def build_world():
     global player
@@ -100,6 +101,8 @@ def update():
     global state, hp
     if state != STATE_IN_GAME:
         return
+
+
     hp -= gfw.delta_time * 1.2
     gfw.world.update()
     if hp < 0:
@@ -125,9 +128,9 @@ def handle_event(e):
         if e.key == SDLK_ESCAPE: 
             gfw.pop()
         elif e.key == SDLK_DOWN:
-            generate_stair()
-        elif e.key == SDLK_UP:
             end_game()
+        elif e.key == SDLK_UP:
+            start_game()
     if e.type == SDL_MOUSEBUTTONDOWN:
         for s in gfw.world.objects_at(gfw.layer.stairs):
             if s.ylevel == c_level:

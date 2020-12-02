@@ -14,8 +14,9 @@ class Entry:
         self.time = time.time()
 
 def load():
-    global font, image
-    font = gfw.font.load('../res/font/FlappyFont.TTF', 30)
+    global font, font_now, image
+    font = gfw.font.load('../res/font/FlappyFont.TTF', 50)
+    font_now = gfw.font.load('../res/font/FlappyFont.TTF', 90)
 
     global scores
     try:
@@ -58,11 +59,14 @@ def draw():
     y = get_canvas_height() // 2
     for e in scores:
         str = "{:2d} {:7.1f}".format(no, e.score)
-        color = (0, 128, 200) if no == last_rank else (139, 69, 19)
+        str_now = "{:7.1f}".format(e.score)
+        color = (255, 1, 1) if no == last_rank else (139, 69, 19)
+        if no == last_rank:
+        	font_now.draw(get_canvas_width() // 2 - 200, get_canvas_height() - 400, str_now, color)
         font.draw(x, y, str, color)
-        #font.draw(300, y, time.asctime(time.localtime(e.time)), color)
-        y -= 30
+#        font.draw(x, y, str, color)
+        y -= 50
         no += 1
-
+    		#font.draw(300, y, time.asctime(time.localtime(e.time)), color)
 def update():
     pass
