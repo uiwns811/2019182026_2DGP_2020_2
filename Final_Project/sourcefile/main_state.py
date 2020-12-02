@@ -9,13 +9,25 @@ import gobj
 import time
 import random
 import collision
+import highscore
 
 canvas_width = 700
 canvas_height = 1000
 
+SCORE_TEXT_COLOR = (255, 0, 0)
+STATE_IN_GAME, STATE_GAME_OVER = range(2)
+
+def start_game():
+    global state
+    if state != STATE_GAME_OVER:
+        return
+    state = STATE_IN_GAME
+    global hp
+    hp = 10
+
 def build_world():
     global player
-    gfw.world.init(['bg', 'stairs', 'coins', 'player'])
+    gfw.world.init(['bg', 'stairs', 'coins', 'player', 'ui'])
 
     generate_player()
     generate_stair()
@@ -25,9 +37,6 @@ def build_world():
     # gfw.world.add(gfw.layer.bg, bg)
     background.init()
     gfw.world.add(gfw.layer.bg, background)
-
-    global font
-    font = gfw.font.load('../res/font' + '/ARCADECLASSIC.TTF', 40)
 
 def generate_player():
     global player, bg
@@ -70,20 +79,42 @@ def enter():
     build_world()
     # generate_player()
     generate_stair()
-    # for e in range (0, 20):
+
+    highscore.load()
+
+    global game_over_image, font
+    game_over_image = gfw.image.load('../res/image/game_over.png')
+    font = gfw.font.load('../res/font/FlappyFont.TTF', 35)
+
+    global state, hp
+    state = STATE_IN_GAME
+    hp = 100
+
+def end_game():
+    global state
+    state = STATE_GAME_OVER
+    highscore.add(hp)
+    gfw.world.add(gfw.layer.ui, highscore)
 
 def update():
-    #generate_stair()
+    global state, hp
+    if state != STATE_IN_GAME:
+        return
+    hp -= gfw.delta_time * 1.2
     gfw.world.update()
-    # time.sleep(1)
-
-    remove()
-    # stairs_gen.update()
+    if hp < 0:
+        end_game()
+    #remove()
 
 def draw():
     gfw.world.draw()
     gobj.draw_collision_box()
-    font.draw(20, canvas_height - 45, "hello")
+    hp_pos = get_canvas_width() * 2 // 5, get_canvas_height() - 30
+    font.draw(*hp_pos, 'HP : %.1f' % hp, SCORE_TEXT_COLOR)
+
+    if state == STATE_GAME_OVER:
+        center = get_canvas_width() // 2, get_canvas_height() // 2
+        game_over_image.draw(*center)
 
 def handle_event(e):
     c_level = 4
@@ -95,6 +126,8 @@ def handle_event(e):
             gfw.pop()
         elif e.key == SDLK_DOWN:
             generate_stair()
+        elif e.key == SDLK_UP:
+            end_game()
     if e.type == SDL_MOUSEBUTTONDOWN:
         for s in gfw.world.objects_at(gfw.layer.stairs):
             if s.ylevel == c_level:
