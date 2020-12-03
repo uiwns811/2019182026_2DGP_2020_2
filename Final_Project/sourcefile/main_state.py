@@ -17,6 +17,8 @@ canvas_height = 1000
 SCORE_TEXT_COLOR = (255, 0, 0)
 STATE_IN_GAME, STATE_GAME_OVER = range(2)
 
+before_setting = 1
+
 def start_game():
     global state
     if state != STATE_GAME_OVER:
@@ -133,6 +135,11 @@ def handle_event(e):
     if e.type == SDL_MOUSEBUTTONDOWN:
         if player.pos[1] > 400:
             collision_stairs(e)
+            global before_setting
+            if before_setting < 4:
+                for stairobj in gfw.world.objects_at(gfw.layer.stairs):
+                    stairobj.move_pos_before_4(player.get_roll())
+                before_setting += 1
         # c_level += 1
         # print('c_level : ', c_level)
         # for s in gfw.world.objects_at(gfw.layer.stairs):
@@ -164,19 +171,17 @@ def check_stairs(e):
         return False;
 
 def collision_stairs(e):
+    global player
     c_level = 4
-    print('c_level : ', c_level)
-    for s in gfw.world.objects_at(gfw.layer.stairs):
-        if s.ylevel == c_level:
-            # Stair.move_pos(s)
-            check_stairs(s)
-            if check_stairs(s) == True:
-                if Stair.check_x(s) == moveLeft:
-                    for sa in gfw.world.objects_at(gfw.layer.stairs):
-                        Stair.move_pos(sa, moveLeft)
-                else:
-                    for sa in gfw.world.objects_at(gfw.layer.stairs):
-                        Stair.move_pos(sa, moveRight)
+    last_stair = 0, 0
+    print(player.get_roll())
+    for stairobj in gfw.world.objects_at(gfw.layer.stairs):
+        if stairobj.get_ylevel() == 13:
+            last_stair = stairobj.get_pos()
+        stairobj.move_pos(player.get_roll())
+    # stair_gen.get_xy(last_stair)
+    stair_gen.sub_generate(last_stair)
+
 
 def remove():
     global stairs
