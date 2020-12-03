@@ -58,7 +58,7 @@ def draw():
     x = get_canvas_width() // 3
     y = get_canvas_height() // 2
     for e in scores:
-        str = "{:2d} {:7.1f}".format(no, e.score)
+        str = "{:2d}   {:7.1f}".format(no, e.score)
         str_now = "{:7.1f}".format(e.score)
         color = (255, 1, 1) if no == last_rank else (139, 69, 19)
         if no == last_rank:

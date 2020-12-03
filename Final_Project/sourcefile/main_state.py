@@ -8,22 +8,26 @@ from coins import *
 import gobj
 import time
 import random
-import collision
+# import collision
 import highscore
 
 canvas_width = 700
 canvas_height = 1000
 
-SCORE_TEXT_COLOR = (255, 0, 0)
+HP_TEXT_COLOR = (255, 0, 0)
+SCORE_TEXT_COLOR = (255, 212, 0)
 STATE_IN_GAME, STATE_GAME_OVER = range(2)
 
 before_setting = 1
 
 def start_game():
-    global state
+    global state, stairs, player
     if state != STATE_GAME_OVER:
         return
     gfw.world.remove(highscore)
+    gfw.world.clear_at(1)
+    generate_stair()
+    player.reset()
     state = STATE_IN_GAME
     global hp
     hp = 30
@@ -85,18 +89,20 @@ def enter():
 
     highscore.load() 
 
-    global game_over_image, font
+    global game_over_image, font_hp, font_score
     game_over_image = gfw.image.load('../res/image/game_over.png')
-    font = gfw.font.load('../res/font/FlappyFont.TTF', 35)
+    font_hp = gfw.font.load('../res/font/FlappyFont.TTF', 40)
+    font_score = gfw.font.load('../res/font/FlappyFont.TTF', 30)
 
-    global state, hp
+    global state, hp, score
     state = STATE_IN_GAME
     hp = 30
+    score = 0
 
 def end_game():
     global state
     state = STATE_GAME_OVER
-    highscore.add(hp)
+    highscore.add(score)
     gfw.world.add(gfw.layer.ui, highscore)
 
 def update():
@@ -104,14 +110,14 @@ def update():
     if state != STATE_IN_GAME:
         return
 
-    if hp > 20:
+    if hp < 30:
         hp -= gfw.delta_time * 3.0
-    elif hp > 10:
+    elif hp > 50:
         hp -= gfw.delta_time * 5.0
     else: 
         hp -= gfw.delta_time * 7.0
     gfw.world.update()
-    if hp < 0:
+    if hp < 0.1:
         end_game()
     #remove()
 
@@ -119,7 +125,9 @@ def draw():
     gfw.world.draw()
     gobj.draw_collision_box()
     hp_pos = get_canvas_width() * 2 // 5, get_canvas_height() - 30
-    font.draw(*hp_pos, 'HP : %.1f' % hp, SCORE_TEXT_COLOR)
+    score_pos = get_canvas_width() - 200, get_canvas_height() - 100
+    font_hp.draw(*hp_pos, 'HP : %.1f' % hp, HP_TEXT_COLOR)
+    font_score.draw(*score_pos, 'SCORE : %.f' % score, SCORE_TEXT_COLOR)
 
     if state == STATE_GAME_OVER:
         center = get_canvas_width() // 2, get_canvas_height() // 2
@@ -145,16 +153,36 @@ def handle_event(e):
                 print('get_roll : ', player.get_roll())
                 stairobj.move_pos_before_4(player.get_roll())
             before_setting += 1
-        #collision.check_collision()
+        for stairobj in gfw.world.objects_at(gfw.layer.stairs):
+            if player.pos[1] < 100:
+                if stairobj.get_ylevel() == 0:
+                    check_collision_stairs(stairobj)
+            elif player.pos[1] < 200:
+                if stairobj.get_ylevel() == 1:
+                    check_collision_stairs(stairobj)
+            elif player.pos[1] < 300:
+                if stairobj.get_ylevel() == 2:
+                    check_collision_stairs(stairobj)
+            elif player.pos[1] < 400:
+                if stairobj.get_ylevel() == 3:
+                    check_collision_stairs(stairobj)
+            else:
+                if stairobj.get_ylevel() == 4:
+                    check_collision_stairs(stairobj)
+                elif stairobj.get_ylevel() == 3:
+                    check_collision_stairs(stairobj)
         
 
     player.handle_event(e)
     # if stairs.handle_event(e):
        #  return
 
-def collision_check_stairs(e):
+def check_collision_stairs(e):
+    global hp, score
     if gobj.collides_box(player, e):
         print('Stairs Collision', e)
+        hp += 2
+        score += 1.0
         return True;
     else:
         return False;
