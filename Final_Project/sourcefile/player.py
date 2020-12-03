@@ -9,7 +9,7 @@ class Player:
 
     #constructor
     def __init__(self):
-        self.pos = get_canvas_width() - 100, 200
+        self.pos = get_canvas_width() // 2, 200
         self.delta = 0, 0
         self.speed = 200
         # 게임 시작 전 character_standard와 character_clock이 번갈아 나타나도록 구현

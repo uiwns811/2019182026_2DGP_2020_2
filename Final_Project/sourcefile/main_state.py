@@ -83,7 +83,7 @@ def enter():
     # generate_player()
     generate_stair()
 
-    highscore.load()
+    highscore.load() 
 
     global game_over_image, font
     game_over_image = gfw.image.load('../res/image/game_over.png')
@@ -136,28 +136,12 @@ def handle_event(e):
         if player.pos[1] > 400:
             collision_stairs(e)
             global before_setting
-            if before_setting < 4:
-                for stairobj in gfw.world.objects_at(gfw.layer.stairs):
-                    stairobj.move_pos_before_4(player.get_roll())
-                before_setting += 1
-        # c_level += 1
-        # print('c_level : ', c_level)
-        # for s in gfw.world.objects_at(gfw.layer.stairs):
-        #     if s.ylevel == c_level:
-        #         # Stair.move_pos(s)
-        #         check_stairs(s)
-        #         if check_stairs(s) == True:
-        #             if Stair.check_x(s) == moveLeft:
-        #                 for sa in gfw.world.objects_at(gfw.layer.stairs):
-        #                     Stair.move_pos(sa, moveLeft)
-        #             else:
-        #                 for sa in gfw.world.objects_at(gfw.layer.stairs):
-        #                     Stair.move_pos(sa, moveRight)
-
-            # bb = Stair.get_bb(s)
-            # print(bb)
-            # sc = gfw.world.count_at(gfw.layer.stairs)
-            # print('sc : ', sc)
+        if before_setting < 4:
+            for stairobj in gfw.world.objects_at(gfw.layer.stairs):
+                print('get_roll : ', player.get_roll())
+                stairobj.move_pos_before_4(player.get_roll())
+            before_setting += 1
+        
 
     player.handle_event(e)
     # if stairs.handle_event(e):

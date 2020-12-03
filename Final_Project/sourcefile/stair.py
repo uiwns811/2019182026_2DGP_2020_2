@@ -9,13 +9,14 @@ moveRight = 1
 # JSON 사용해보자....에휴 이게 뭐하는 짓거리임
 
 class Stair:
-    def __init__(self, pos, ylevel): #생성시 pos, delta를 넘겨줄 것
+    def __init__(self, pos, ylevel, xdirection): #생성시 pos, delta를 넘겨줄 것
         self.x, self.y = pos
         self.image = gfw.image.load('../res/image/stairs.png')
         self.radius = self.image.w // 2
         self.width = self.image.w
         self.height = self.image.h
         self.ylevel = ylevel
+        self.xdirection = xdirection
         # self.bb_l = -self.image.w
         # self.bb_b = -self.image.h
         # self.bb_r = get_canvas_width() + self.image.w
