@@ -26,7 +26,7 @@ def start_game():
     gfw.world.remove(highscore)
     state = STATE_IN_GAME
     global hp
-    hp = 100
+    hp = 30
 
 def build_world():
     global player
@@ -46,8 +46,8 @@ def generate_player():
     player = Player()
     player.bg = background
     gfw.world.add(gfw.layer.player, player)
-    bb = player.get_bb()
-    print('player =', bb)
+    # bb = player.get_bb()
+    # print('player =', bb)
   
 def generate_stair():
     print('*****************************hi*************************')    
@@ -91,7 +91,7 @@ def enter():
 
     global state, hp
     state = STATE_IN_GAME
-    hp = 100
+    hp = 30
 
 def end_game():
     global state
@@ -104,8 +104,12 @@ def update():
     if state != STATE_IN_GAME:
         return
 
-
-    hp -= gfw.delta_time * 1.2
+    if hp > 20:
+        hp -= gfw.delta_time * 3.0
+    elif hp > 10:
+        hp -= gfw.delta_time * 5.0
+    else: 
+        hp -= gfw.delta_time * 7.0
     gfw.world.update()
     if hp < 0:
         end_game()
@@ -134,27 +138,28 @@ def handle_event(e):
             start_game()
     if e.type == SDL_MOUSEBUTTONDOWN:
         if player.pos[1] > 400:
-            collision_stairs(e)
+            move_gen_stairs(e)
             global before_setting
         if before_setting < 4:
             for stairobj in gfw.world.objects_at(gfw.layer.stairs):
                 print('get_roll : ', player.get_roll())
                 stairobj.move_pos_before_4(player.get_roll())
             before_setting += 1
+        #collision.check_collision()
         
 
     player.handle_event(e)
     # if stairs.handle_event(e):
        #  return
 
-def check_stairs(e):
+def collision_check_stairs(e):
     if gobj.collides_box(player, e):
         print('Stairs Collision', e)
         return True;
     else:
         return False;
 
-def collision_stairs(e):
+def move_gen_stairs(e):
     global player
     c_level = 4
     last_stair = 0, 0
