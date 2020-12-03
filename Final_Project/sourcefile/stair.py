@@ -40,22 +40,24 @@ class Stair:
         return self.left, self.bottom, self.right, self.top
 
     def check_x(self):
-        print('djihfskkjshkd')        
         if self.xdirection == 0:
+            print("moveLeft")
             return moveLeft
         else:
+            print("moveRight")
             return moveRight
 
     def move_pos(self, movedirection):
-        if movedirection == moveLeft:
-            self.x -= self.image.w
-        else:
-            self.x += self.image.w
+        #if movedirection == moveLeft:
+       #    self.x -= self.image.w
+        #else:
+        #    self.x += self.image.w
         self.y -= self.image.h
         self.left = self.x - self.image.w // 2
         self.bottom = self.y - self.image.h // 2
         self.right = self.left + self.image.w
         self.top = self.bottom + self.image.h
+        self.ylevel -= 1
         if self.out_of_screen():
             gfw.world.remove(self)
 

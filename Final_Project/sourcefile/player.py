@@ -9,7 +9,7 @@ class Player:
 
     #constructor
     def __init__(self):
-        self.pos = get_canvas_width() // 2, get_canvas_height() // 2
+        self.pos = get_canvas_width() - 100, 200
         self.delta = 0, 0
         self.speed = 200
         # 게임 시작 전 character_standard와 character_clock이 번갈아 나타나도록 구현
@@ -23,12 +23,13 @@ class Player:
         self.left = self.pos[0] - self.image.w // 2
         self.bottom = self.pos[1] - self.image.h // 2
         self.right = self.left + self.image.w
-        self.top = self.bottom + 3
+        self.top = self.bottom + self.image.h
+        self.stair_image = gfw.image.load(gobj.res('/stairs.png'))
 
     def draw(self):
         # pos = self.bg.to_screen(self.pos)
         self.image.draw(*self.pos)
-
+        
     def update(self):
         x,y = self.pos
         dx,dy = self.delta
@@ -47,19 +48,43 @@ class Player:
         self.fidx = int(frame) % 5
 
     def get_bb(self):
+        self.left = self.pos[0] - self.image.w // 2
+        self.bottom = self.pos[1] - self.image.h // 2
+        self.right = self.left + self.image.w
+        self.top = self.bottom + self.image.h
         return self.left, self.bottom, self.right, self.top
 
-    def handle_event(self, e):
-    	pair = (e.type, e.key)
-    	if e.type == SDL_MOUSEBUTTONDOWN:
-    	 	self.image = gfw.image.load(gobj.res('/character_clock.png'))
+    def move_left(self):
+        pass
 
-    	if e.type == SDL_KEYDOWN:
-	    	if e.key == SDLK_SPACE:
-    			self.roll += 1
-    			
-    			if self.roll % 2 == 0:
-    				self.image = gfw.image.load(gobj.res('/character_right.png'))
-    				
-    			if self.roll % 2 == 1:
-    				self.image = gfw.image.load(gobj.res('/character_left.png'))
+    def handle_event(self, e):
+        pair = (e.type, e.key)
+        #self.stair_image = gfw.image.load(gobj.res('/stairs.png'))
+        if e.type == SDL_MOUSEBUTTONDOWN:
+            if self.pos[1] < self.stair_image.h + 200:
+                self.pos = 3 * self.stair_image.w, 200 + self.stair_image.h
+                self.left, self.bottom, self.right, self.top = Player.get_bb(self)
+                self.image = gfw.image.load(gobj.res('/character_left.png'))
+            elif self.pos[1] < self.stair_image.h * 2 + 200:
+                self.pos = 2 * self.stair_image.w, 200 + self.stair_image.h * 2
+                self.left, self.bottom, self.right, self.top = Player.get_bb(self)
+                self.image = gfw.image.load(gobj.res('/character_left.png'))
+            elif self.pos[1] < self.stair_image.h * 3 + 200:
+                self.pos = 1 * self.stair_image.w, 200 + self.stair_image.h * 3
+                self.left, self.bottom, self.right, self.top = Player.get_bb(self)
+                self.image = gfw.image.load(gobj.res('/character_left.png'))
+            elif self.pos[1] < self.stair_image.h * 4 + 200:
+                self.pos = 2 * self.stair_image.w, 200 + self.stair_image.h * 4
+                self.left, self.bottom, self.right, self.top = Player.get_bb(self)
+                self.image = gfw.image.load(gobj.res('/character_right.png'))
+
+            # self.image = gfw.image.load(gobj.res('/character_left.png'))
+    	 	# self.image = gfw.image.load(gobj.res('/character_clock.png'))
+        if e.type == SDL_KEYDOWN:
+            if e.key == SDLK_SPACE:
+                self.roll += 1
+
+            if self.roll % 2 == 0:
+                self.image = gfw.image.load(gobj.res('/character_right.png'))
+            if self.roll % 2 == 1:
+                self.image = gfw.image.load(gobj.res('/character_left.png'))

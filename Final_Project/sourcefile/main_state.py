@@ -120,7 +120,6 @@ def draw():
         game_over_image.draw(*center)
 
 def handle_event(e):
-    c_level = 4
     # prev_dx = boy.dx
     if e.type == SDL_QUIT:
         gfw.quit()
@@ -132,27 +131,30 @@ def handle_event(e):
         elif e.key == SDLK_UP:
             start_game()
     if e.type == SDL_MOUSEBUTTONDOWN:
-        for s in gfw.world.objects_at(gfw.layer.stairs):
-            if s.ylevel == c_level:
-                # Stair.move_pos(s)
-                check_stairs(s)
-                if check_stairs(s) == True:
-                    print(Stair.check_x(s))
-                    if Stair.check_x(s) == moveLeft:
-                        for sa in gfw.world.objects_at(gfw.layer.stairs):
-                            Stair.move_pos(sa, moveLeft)
-                    else:
-                        for sa in gfw.world.objects_at(gfw.layer.stairs):
-                            Stair.move_pos(sa, moveRight)
-                    c_level += 1
+        if player.pos[1] > 400:
+            collision_stairs(e)
+        # c_level += 1
+        # print('c_level : ', c_level)
+        # for s in gfw.world.objects_at(gfw.layer.stairs):
+        #     if s.ylevel == c_level:
+        #         # Stair.move_pos(s)
+        #         check_stairs(s)
+        #         if check_stairs(s) == True:
+        #             if Stair.check_x(s) == moveLeft:
+        #                 for sa in gfw.world.objects_at(gfw.layer.stairs):
+        #                     Stair.move_pos(sa, moveLeft)
+        #             else:
+        #                 for sa in gfw.world.objects_at(gfw.layer.stairs):
+        #                     Stair.move_pos(sa, moveRight)
 
             # bb = Stair.get_bb(s)
             # print(bb)
             # sc = gfw.world.count_at(gfw.layer.stairs)
             # print('sc : ', sc)
 
+    player.handle_event(e)
     # if stairs.handle_event(e):
-    #     return
+       #  return
 
 def check_stairs(e):
     if gobj.collides_box(player, e):
@@ -160,6 +162,21 @@ def check_stairs(e):
         return True;
     else:
         return False;
+
+def collision_stairs(e):
+    c_level = 4
+    print('c_level : ', c_level)
+    for s in gfw.world.objects_at(gfw.layer.stairs):
+        if s.ylevel == c_level:
+            # Stair.move_pos(s)
+            check_stairs(s)
+            if check_stairs(s) == True:
+                if Stair.check_x(s) == moveLeft:
+                    for sa in gfw.world.objects_at(gfw.layer.stairs):
+                        Stair.move_pos(sa, moveLeft)
+                else:
+                    for sa in gfw.world.objects_at(gfw.layer.stairs):
+                        Stair.move_pos(sa, moveRight)
 
 def remove():
     global stairs
