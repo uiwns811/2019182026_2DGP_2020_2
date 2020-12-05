@@ -62,11 +62,12 @@ def draw():
         str_now = "{:7.1f}".format(e.score)
         color = (255, 1, 1) if no == last_rank else (139, 69, 19)
         if no == last_rank:
-        	font_now.draw(get_canvas_width() // 2 - 200, get_canvas_height() - 400, str_now, color)
+        	font_now.draw(160, get_canvas_height() - 400, str_now, color)
+        #font.draw(x, y, str_now, color)
         font.draw(x, y, str, color)
-#        font.draw(x, y, str, color)
+        #font.draw(300, y, time.asctime(time.localtime(e.time)), color)
         y -= 50
         no += 1
-    		#font.draw(300, y, time.asctime(time.localtime(e.time)), color)
+    	
 def update():
     pass
