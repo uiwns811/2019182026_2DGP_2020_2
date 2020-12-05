@@ -24,20 +24,29 @@ def start_game():
     global state, stairs, player
     if state != STATE_GAME_OVER:
         return
+
     gfw.world.remove(highscore)
-    gfw.world.clear_at(1)
-    generate_stair()
-    player.reset()
+    gfw.world.clear_at(gfw.layer.stairs)
+    player.reset() 
+
     state = STATE_IN_GAME
-    global hp
+
+    global hp, score
     hp = 30
+    score = 0
+
+def end_game():
+    global state
+    state = STATE_GAME_OVER
+    highscore.add(score)
+    gfw.world.add(gfw.layer.ui, highscore)
 
 def build_world():
     global player
     gfw.world.init(['bg', 'stairs', 'coins', 'player', 'ui'])
 
     generate_player()
-    generate_stair()
+    stairs = stair_gen.update()
     
     # global bg
     # bg = FixedBackground('/background.png')
@@ -53,39 +62,38 @@ def generate_player():
     # bb = player.get_bb()
     # print('player =', bb)
   
-def generate_stair():
-    print('*****************************hi*************************')    
+# def generate_stair():
+#     print('*****************************hi*************************')    
 
-    # stair_gen.init()    global stairs
-    # for s in range (0, 13):
-    stairs = stair_gen.update()
-    print("generate_stair")
+#     # stair_gen.init()    global stairs
+#     # for s in range (0, 13):
+#     print("generate_stair")
 
-    # global coins
-    # sc = random.randint(1, 5)
-    # if sc == 3:
-    #     coins = Coins((stairs.x, stairs.y), (15, 15))
-    #     gfw.world.add(gfw.layer.coins, coins)
-    # for s in gfw.world.objects_at(gfw.layer.stairs):
-    #     bb = Stair.get_bb(s)
-    #     print(bb)
+#     # global coins
+#     # sc = random.randint(1, 5)
+#     # if sc == 3:
+#     #     coins = Coins((stairs.x, stairs.y), (15, 15))
+#     #     gfw.world.add(gfw.layer.coins, coins)
+#     # for s in gfw.world.objects_at(gfw.layer.stairs):
+#     #     bb = Stair.get_bb(s)
+#     #     print(bb)
 
     
-    # global stairs, bg
-    # for e in range(0, 15):
-    #     stairs = Stair()
-    # # stairs.bg = bg
-    #     gfw.world.add(gfw.layer.stairs, stairs)
+#     # global stairs, bg
+#     # for e in range(0, 15):
+#     #     stairs = Stair()
+#     # # stairs.bg = bg
+#     #     gfw.world.add(gfw.layer.stairs, stairs)
 
-    # for stairs in gfw.world.objects_at(gfw.layer.stairs):
-    #     gfw.world.add(gfw.layer.stairs, stairs)
+#     # for stairs in gfw.world.objects_at(gfw.layer.stairs):
+#     #     gfw.world.add(gfw.layer.stairs, stairs)
 
 def enter():
     center = get_canvas_width() // 2, get_canvas_height() // 2
 
     build_world()
     # generate_player()
-    generate_stair()
+    #stairs = stair_gen.update()
 
     highscore.load() 
 
@@ -98,17 +106,14 @@ def enter():
     state = STATE_IN_GAME
     hp = 30
     score = 0
-
-def end_game():
-    global state
-    state = STATE_GAME_OVER
-    highscore.add(score)
-    gfw.world.add(gfw.layer.ui, highscore)
+    start_game()
 
 def update():
     global state, hp
     if state != STATE_IN_GAME:
         return
+
+    gfw.world.update()
 
     if hp < 30:
         hp -= gfw.delta_time * 1.0
@@ -145,6 +150,10 @@ def handle_event(e):
         elif e.key == SDLK_UP:
             start_game()
     if e.type == SDL_MOUSEBUTTONDOWN:
+        global state
+        if state == STATE_GAME_OVER:
+            return
+
         global before_setting
         if before_setting < 5:
             for stairobj in gfw.world.objects_at(gfw.layer.stairs):
@@ -199,7 +208,8 @@ def handle_event(e):
                 # elif stairobj.get_ylevel() == 4:
                 #     print('get_ylevel: ', stairobj.get_ylevel())
                 #     check_collision_stairs(stairobj)
-    player.handle_event(e)
+    if state != STATE_GAME_OVER:
+        player.handle_event(e)
     # if stairs.handle_event(e):
        #  return
 
