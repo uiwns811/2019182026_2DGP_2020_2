@@ -16,8 +16,11 @@ def update():
 
 def draw():
 	bg_image.draw(get_canvas_width() // 2, get_canvas_height() // 2)
-	logo_image.draw(300, 600)
-	font.draw(100, 300, 'START : PUSH "SPACE"', TEXT_COLOR)
+	logo_image.draw(350, 700)
+	font.draw(190, 450, 'START -> "ENTER"', TEXT_COLOR)
+	font.draw(150, 300, 'STEP UP -> "MOUSE"', (0, 0, 0))
+	font.draw(150, 250, 'TURN -> "SPACE"', (0, 0, 0))
+	font.draw(150, 200, 'RESTART -> "ENTER"', (0, 0, 0))
 	
 
 def handle_event(e):
@@ -26,7 +29,7 @@ def handle_event(e):
 	elif e.type == SDL_KEYDOWN:
 		if e.key == SDLK_ESCAPE:
 			gfw.quit()
-		elif e.key == SDLK_SPACE:
+		elif e.key == SDLK_RETURN:
 			gfw.change(game_state)
 
 def exit():

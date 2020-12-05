@@ -35,11 +35,17 @@ def start_game():
     hp = 30
     score = 0
 
+    music_bg.repeat_play()
+
 def end_game():
-    global state, player
+    global state, player, font_hp
     state = STATE_GAME_OVER
     #player.dead_player()
-    
+    highscore.add(score)
+    gfw.world.add(gfw.layer.ui, highscore)
+    music_bg.stop()
+    gameover_bg.play()
+    font_hp.draw(200, 200, 'RESTART -> ENTER', (0, 0, 0))
 
 def build_world():
     global player
@@ -102,11 +108,17 @@ def enter():
     font_hp = gfw.font.load('../res/font/FlappyFont.TTF', 40)
     font_score = gfw.font.load('../res/font/FlappyFont.TTF', 30)
 
+    global music_bg, step_up_bg, gameover_bg
+    music_bg = load_music('../res/audio/main_bgm.mp3')
+    #step_up_bg = load_music('../res/audio/stair_up.mp3')
+    gameover_bg = load_music('../res/audio/gameover.MP3') 
+
     global state, hp, score
     state = STATE_IN_GAME
     hp = 30
     score = 0
     start_game()
+    music_bg.repeat_play()
 
 def update():
     global state, hp
@@ -125,6 +137,8 @@ def update():
     gfw.world.update()
     if hp < 0.1:
         end_game()
+
+
     #remove()
 
 def draw():
@@ -137,10 +151,7 @@ def draw():
 
     if state == STATE_GAME_OVER:
         center = get_canvas_width() // 2, get_canvas_height() // 2
-        if player.pos[1] < 200:
-            game_over_image.draw(*center)
-            highscore.add(score)
-            gfw.world.add(gfw.layer.ui, highscore)
+        game_over_image.draw(*center)
 
 
 def handle_event(e):
@@ -155,10 +166,12 @@ def handle_event(e):
         elif e.key == SDLK_RETURN:
             start_game()
     if e.type == SDL_MOUSEBUTTONDOWN:
+        #step_up_bg.play()
         global state
         if state == STATE_GAME_OVER:
             return
 
+        #step_up_bg.play()
         global before_setting
         if before_setting < 5:
             for stairobj in gfw.world.objects_at(gfw.layer.stairs):
@@ -288,7 +301,10 @@ def remove():
         # print('================================================')
 
 def exit():
-    pass
+    global music_bg, wav_step_up, gameover_bg
+    del music_bg
+    #del wav_step_up
+    del gameover_bg
 
 if __name__ == '__main__':
     gfw.run_main()
