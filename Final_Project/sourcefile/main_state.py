@@ -111,11 +111,11 @@ def update():
         return
 
     if hp < 30:
-        hp -= gfw.delta_time * 3.0
-    elif hp > 50:
-        hp -= gfw.delta_time * 5.0
+        hp -= gfw.delta_time * 1.0
+    elif hp < 60:
+        hp -= gfw.delta_time * 15.0
     else: 
-        hp -= gfw.delta_time * 7.0
+        hp -= gfw.delta_time * 20.0
     gfw.world.update()
     if hp < 0.1:
         end_game()
@@ -145,47 +145,86 @@ def handle_event(e):
         elif e.key == SDLK_UP:
             start_game()
     if e.type == SDL_MOUSEBUTTONDOWN:
-        if player.pos[1] > 400:
-            move_gen_stairs(e)
-            global before_setting
-        if before_setting < 4:
+        global before_setting
+        if before_setting < 5:
             for stairobj in gfw.world.objects_at(gfw.layer.stairs):
-                print('get_roll : ', player.get_roll())
                 stairobj.move_pos_before_4(player.get_roll())
             before_setting += 1
+
+        if player.pos[1] > 470:
+            move_gen_stairs(e)
+
         for stairobj in gfw.world.objects_at(gfw.layer.stairs):
-            if player.pos[1] < 100:
-                if stairobj.get_ylevel() == 0:
-                    check_collision_stairs(stairobj)
-            elif player.pos[1] < 200:
+            if player.pos[1] < 200:
+                # for stairobj in gfw.world.objects_at(gfw.layer.stairs):
                 if stairobj.get_ylevel() == 1:
                     check_collision_stairs(stairobj)
-            elif player.pos[1] < 300:
+                    print('< 270 player.pos[1] : ', player.pos[1])
+            elif player.pos[1] < 270:
+                # for stairobj in gfw.world.objects_at(gfw.layer.stairs):
                 if stairobj.get_ylevel() == 2:
                     check_collision_stairs(stairobj)
-            elif player.pos[1] < 400:
+                    print('< 350 player.pos[1] : ', player.pos[1])
+            elif player.pos[1] < 350:
+                # for stairobj in gfw.world.objects_at(gfw.layer.stairs):
                 if stairobj.get_ylevel() == 3:
                     check_collision_stairs(stairobj)
+                    print('< 410 player.pos[1] : ', player.pos[1])
+                # if check_collision_stairs(stairobj) == True:
+                #     print('get_ylevel: ', stairobj.get_ylevel())
+                #     check_collision_stairs(stairobj)
+                
+                # if stairobj.get_ylevel() == 3:
+                #     print('get_ylevel: ', stairobj.get_ylevel())
+                #     check_collision_stairs(stairobj)
+                # elif stairobj.get_ylevel() == 2:
+                #     print('get_ylevel: ', stairobj.get_ylevel())
+                #     check_collision_stairs(stairobj)
+                # elif stairobj.get_ylevel() == 4:
+                #     print('get_ylevel: ', stairobj.get_ylevel())
+                #     check_collision_stairs(stairobj)
             else:
+                #for stairobj in gfw.world.objects_at(gfw.layer.stairs):
                 if stairobj.get_ylevel() == 4:
                     check_collision_stairs(stairobj)
-                elif stairobj.get_ylevel() == 3:
-                    check_collision_stairs(stairobj)
-        
+                    print('else player.pos[1] : ', player.pos[1])
+                # level == 4
+                # if check_collision_stairs(stairobj) == True:
+                #     print('get_ylevel: ', stairobj.get_ylevel())
+                #     check_collision_stairs(stairobj)
 
+                # if stairobj.get_ylevel() == 5:
+                #     print('get_ylevel: ', stairobj.get_ylevel())
+                #     check_collision_stairs(stairobj)
+                # elif stairobj.get_ylevel() == 4:
+                #     print('get_ylevel: ', stairobj.get_ylevel())
+                #     check_collision_stairs(stairobj)
     player.handle_event(e)
     # if stairs.handle_event(e):
        #  return
 
 def check_collision_stairs(e):
-    global hp, score
+    global hp, score, state
+    dead_by_stairs()
     if gobj.collides_box(player, e):
         print('Stairs Collision', e)
         hp += 2
         score += 1.0
         return True;
     else:
+        #state = STATE_GAME_OVER
+        #end_game()
         return False;
+
+# def collision_stairs(e):
+#     global player
+#     c_level = 4
+#     last_stair = 0, 0
+#     for stairobj in gfw.world.objects_at(gfw.layer.stairs):
+#         stairobj.move_pos(player.get_roll())
+#         if stairobj.get_ylevel() == 12:
+#             last_stair = stairobj.get_pos()
+#     stair_gen.sub_generate(stair_gen.get_xy(last_stair))
 
 def move_gen_stairs(e):
     global player
@@ -196,8 +235,32 @@ def move_gen_stairs(e):
         if stairobj.get_ylevel() == 13:
             last_stair = stairobj.get_pos()
         stairobj.move_pos(player.get_roll())
-    # stair_gen.get_xy(last_stair)
+    stair_gen.get_xy(last_stair)
     stair_gen.sub_generate(last_stair)
+
+def dead_by_stairs():
+    global player, state
+    for stairobj in gfw.world.objects_at(gfw.layer.stairs):
+        if player.pos[1] < 200:
+            if stairobj.get_ylevel() == 1:
+                print(stairobj.x, stairobj.left, stairobj.right, stairobj.radius)
+                if abs(stairobj.x - player.pos[0]) > 100:
+                    end_game()
+        elif player.pos[1] < 270:
+            if stairobj.get_ylevel() == 2:
+                print(stairobj.x, stairobj.left, stairobj.right, stairobj.radius)
+                if abs(stairobj.x - player.pos[0]) > 100:
+                    end_game()
+        elif player.pos[1] < 350:
+            if stairobj.get_ylevel() == 3:
+                print(stairobj.x, stairobj.left, stairobj.right, stairobj.radius)
+                if abs(stairobj.x - player.pos[0]) > 50:
+                    end_game()
+        else:
+            if stairobj.get_ylevel() == 4:
+                print(stairobj.x, stairobj.left, stairobj.right, stairobj.radius)
+                if abs(stairobj.x - player.pos[0]) > 50:
+                    end_game()
 
 
 def remove():

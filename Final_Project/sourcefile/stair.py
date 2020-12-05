@@ -15,6 +15,8 @@ class Stair:
         self.radius = self.image.w // 2
         self.width = self.image.w
         self.height = self.image.h
+        self.left = self.x - self.radius
+        self.right = self.x + self.radius
         self.ylevel = ylevel
         self.xdirection = xdirection
         # self.bb_l = -self.image.w

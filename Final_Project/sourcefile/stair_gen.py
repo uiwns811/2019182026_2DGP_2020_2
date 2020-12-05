@@ -20,22 +20,37 @@ cnt_inc = 0     # 오른쪽으로의 증가폭
 def init():
     pass
 
-# def get_xy(self):
-#     return self.x, self.y
+def get_xy(prev):
+    global stair_level
+    newX = 0
+    newY = 0
+    prevX, prevY = prev
+    image_w = 148
+    image_h = 88
+    xdirection = random.randint(0, 1)
+    if xdirection == 0:
+        newX = prevX - image_w
+    else:
+        newX = prevX + image_w
+
+    newY = prevY + image_h
+
+    return newX, newY
 
 def update():
     while gfw.world.count_at(gfw.layer.stairs) < STAIR_COUNT:
         generate()
+        
 def generate():
-    x, y, stair_ylevel = get_coords()
+    x, y, stair_ylevel, xdirection = get_coords()
     print()
-    s = Stair((x,y), stair_ylevel)     # pos, delta가 인자이므로 튜플로 묶어서 전달
+    s = Stair((x,y), stair_ylevel, xdirection)     # pos, delta가 인자이므로 튜플로 묶어서 전달
     gfw.world.add(gfw.layer.stairs, s)
 
 def sub_generate(pos):
     xdirection = 1
     print(xdirection)
-    s = Stair(pos, 13)
+    s = Stair(pos, 13, xdirection)
     gfw.world.add(gfw.layer.stairs, s)
 
 def get_coords():           # 좌표를 생성하는 함수를 만들자.. missile말고 item도 만들건데 생성되는 x, y, dx, dy를 결정하는게 따로 필요.
@@ -68,4 +83,4 @@ def get_coords():           # 좌표를 생성하는 함수를 만들자.. missi
     y = stair_level * image.h + 120  # y의 화면상의 위치 표시
     stair_level += 1        #계단의 높이 (최대 12)
     
-    return x, y, stair_level
+    return x, y, stair_level, xdirection
