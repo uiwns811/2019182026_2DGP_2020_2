@@ -1,5 +1,6 @@
 from pico2d import *
 import gfw
+import gobj
 
 MOVE_PPS = 200      # 초당 200픽셀로 움직임
 STAIR_WIDTH = 132
@@ -11,12 +12,10 @@ moveRight = 1
 class Stair:
     def __init__(self, pos, ylevel, xdirection): #생성시 pos, delta를 넘겨줄 것
         self.x, self.y = pos
-        self.image = gfw.image.load('../res/image/stairs.png')
+        self.image = gfw.image.load('res/image/stairs.png')
         self.radius = self.image.w // 2
         self.width = self.image.w
         self.height = self.image.h
-        self.left = self.x - self.radius
-        self.right = self.x + self.radius
         self.ylevel = ylevel
         self.xdirection = xdirection
         # self.bb_l = -self.image.w
@@ -83,3 +82,22 @@ class Stair:
         if out_of_screen(self):
             gfw.world.remove(self)
             print('stair remove~')
+
+class Coin(Stair):
+    def __init__(self, pos, ylevel):
+        self.x, self.y = pos
+        self.ylevel = ylevel
+        self.image = gfw.image.load(gobj.res('/coins.png'))
+        self.width = self.image.w
+        self.height = self.image.h
+        self.radius = self.image.h // 2
+        self.time = get_time()
+        self.fps = 8
+        self.fcount = self.image.w // self.image.h
+
+    def draw(self):
+        elapsed = get_time() - self.time
+        fidx = round(elapsed * self.fps) % self.fcount
+        src_size = self.image.h
+        dst_size = self.radius * 2
+        self.image.clip_draw(src_size * fidx, 0, src_size, src_size, self.x, self.y, dst_size, dst_size)

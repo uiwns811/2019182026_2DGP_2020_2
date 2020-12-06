@@ -4,7 +4,6 @@ import background
 from player import Player
 from stair import *
 import stair_gen
-from coins import *
 import gobj
 import time
 import random
@@ -49,14 +48,11 @@ def end_game():
 
 def build_world():
     global player
-    gfw.world.init(['bg', 'stairs', 'coins', 'player', 'ui'])
+    gfw.world.init(['bg', 'stairs', 'item', 'player', 'ui'])
 
     generate_player()
     stair_gen.update()
-    
-    # global bg
-    # bg = FixedBackground('/background.png')
-    # gfw.world.add(gfw.layer.bg, bg)
+
     background.init()
     gfw.world.add(gfw.layer.bg, background)
 
@@ -65,53 +61,23 @@ def generate_player():
     player = Player()
     player.bg = background
     gfw.world.add(gfw.layer.player, player)
-    # bb = player.get_bb()
-    # print('player =', bb)
-  
-# def generate_stair():
-#     print('*****************************hi*************************')    
-
-#     # stair_gen.init()    global stairs
-#     # for s in range (0, 13):
-#     print("generate_stair")
-
-#     # global coins
-#     # sc = random.randint(1, 5)
-#     # if sc == 3:
-#     #     coins = Coins((stairs.x, stairs.y), (15, 15))
-#     #     gfw.world.add(gfw.layer.coins, coins)
-#     # for s in gfw.world.objects_at(gfw.layer.stairs):
-#     #     bb = Stair.get_bb(s)
-#     #     print(bb)
-
-    
-#     # global stairs, bg
-#     # for e in range(0, 15):
-#     #     stairs = Stair()
-#     # # stairs.bg = bg
-#     #     gfw.world.add(gfw.layer.stairs, stairs)
-
-#     # for stairs in gfw.world.objects_at(gfw.layer.stairs):
-#     #     gfw.world.add(gfw.layer.stairs, stairs)
 
 def enter():
     center = get_canvas_width() // 2, get_canvas_height() // 2
 
     build_world()
-    # generate_player()
-    #stairs = stair_gen.update()
 
     highscore.load() 
 
     global game_over_image, font_hp, font_score
-    game_over_image = gfw.image.load('../res/image/game_over.png')
-    font_hp = gfw.font.load('../res/font/FlappyFont.TTF', 40)
-    font_score = gfw.font.load('../res/font/FlappyFont.TTF', 30)
+    game_over_image = gfw.image.load('res/image/game_over.png')
+    font_hp = gfw.font.load('res/font/FlappyFont.TTF', 40)
+    font_score = gfw.font.load('res/font/FlappyFont.TTF', 30)
 
     global music_bg, step_up_bg, gameover_bg
-    music_bg = load_music('../res/audio/main_bgm.mp3')
+    music_bg = load_music('res/audio/main_bgm.mp3')
     #step_up_bg = load_music('../res/audio/stair_up.mp3')
-    gameover_bg = load_music('../res/audio/gameover.MP3') 
+    gameover_bg = load_music('res/audio/gameover.MP3') 
 
     global state, hp, score
     state = STATE_IN_GAME
@@ -129,7 +95,7 @@ def update():
     gfw.world.update()
 
     if hp < 30:
-        hp -= gfw.delta_time * 1.0
+        hp -= gfw.delta_time * 8.0
     elif hp < 60:
         hp -= gfw.delta_time * 15.0
     else: 
@@ -143,7 +109,7 @@ def update():
 
 def draw():
     gfw.world.draw()
-    gobj.draw_collision_box()
+    # gobj.draw_collision_box()
     hp_pos = get_canvas_width() * 2 // 5, get_canvas_height() - 30
     score_pos = get_canvas_width() - 200, get_canvas_height() - 100
     font_hp.draw(*hp_pos, 'HP : %.1f' % hp, HP_TEXT_COLOR)
@@ -183,54 +149,22 @@ def handle_event(e):
 
         for stairobj in gfw.world.objects_at(gfw.layer.stairs):
             if player.pos[1] < 200:
-                # for stairobj in gfw.world.objects_at(gfw.layer.stairs):
                 if stairobj.get_ylevel() == 1:
                     check_collision_stairs(stairobj)
-                    print('< 270 player.pos[1] : ', player.pos[1])
             elif player.pos[1] < 270:
-                # for stairobj in gfw.world.objects_at(gfw.layer.stairs):
                 if stairobj.get_ylevel() == 2:
                     check_collision_stairs(stairobj)
-                    print('< 350 player.pos[1] : ', player.pos[1])
             elif player.pos[1] < 350:
-                # for stairobj in gfw.world.objects_at(gfw.layer.stairs):
                 if stairobj.get_ylevel() == 3:
                     check_collision_stairs(stairobj)
-                    print('< 410 player.pos[1] : ', player.pos[1])
-                # if check_collision_stairs(stairobj) == True:
-                #     print('get_ylevel: ', stairobj.get_ylevel())
-                #     check_collision_stairs(stairobj)
                 
-                # if stairobj.get_ylevel() == 3:
-                #     print('get_ylevel: ', stairobj.get_ylevel())
-                #     check_collision_stairs(stairobj)
-                # elif stairobj.get_ylevel() == 2:
-                #     print('get_ylevel: ', stairobj.get_ylevel())
-                #     check_collision_stairs(stairobj)
-                # elif stairobj.get_ylevel() == 4:
-                #     print('get_ylevel: ', stairobj.get_ylevel())
-                #     check_collision_stairs(stairobj)
             else:
-                #for stairobj in gfw.world.objects_at(gfw.layer.stairs):
                 if stairobj.get_ylevel() == 4:
                     check_collision_stairs(stairobj)
-                    print('else player.pos[1] : ', player.pos[1])
-                # level == 4
-                # if check_collision_stairs(stairobj) == True:
-                #     print('get_ylevel: ', stairobj.get_ylevel())
-                #     check_collision_stairs(stairobj)
-
-                # if stairobj.get_ylevel() == 5:
-                #     print('get_ylevel: ', stairobj.get_ylevel())
-                #     check_collision_stairs(stairobj)
-                # elif stairobj.get_ylevel() == 4:
-                #     print('get_ylevel: ', stairobj.get_ylevel())
-                #     check_collision_stairs(stairobj)
+                
     if state != STATE_GAME_OVER:
         player.handle_event(e)
-    # if stairs.handle_event(e):
-       #  return
-
+   
 def check_collision_stairs(e):
     global hp, score, state
     dead_by_stairs()
@@ -240,19 +174,8 @@ def check_collision_stairs(e):
         score += 1.0
         return True;
     else:
-        #state = STATE_GAME_OVER
-        #end_game()
-        return False;
-
-# def collision_stairs(e):
-#     global player
-#     c_level = 4
-#     last_stair = 0, 0
-#     for stairobj in gfw.world.objects_at(gfw.layer.stairs):
-#         stairobj.move_pos(player.get_roll())
-#         if stairobj.get_ylevel() == 12:
-#             last_stair = stairobj.get_pos()
-#     stair_gen.sub_generate(stair_gen.get_xy(last_stair))
+        
+        return False
 
 def move_gen_stairs(e):
     global player
@@ -271,22 +194,18 @@ def dead_by_stairs():
     for stairobj in gfw.world.objects_at(gfw.layer.stairs):
         if player.pos[1] < 200:
             if stairobj.get_ylevel() == 1:
-                print(stairobj.x, stairobj.left, stairobj.right, stairobj.radius)
-                if abs(stairobj.x - player.pos[0]) > 100:
+                 if abs(stairobj.x - player.pos[0]) > 100:
                     end_game()
         elif player.pos[1] < 270:
             if stairobj.get_ylevel() == 2:
-                print(stairobj.x, stairobj.left, stairobj.right, stairobj.radius)
                 if abs(stairobj.x - player.pos[0]) > 100:
                     end_game()
         elif player.pos[1] < 350:
             if stairobj.get_ylevel() == 3:
-                print(stairobj.x, stairobj.left, stairobj.right, stairobj.radius)
                 if abs(stairobj.x - player.pos[0]) > 50:
                     end_game()
         else:
             if stairobj.get_ylevel() == 4:
-                print(stairobj.x, stairobj.left, stairobj.right, stairobj.radius)
                 if abs(stairobj.x - player.pos[0]) > 50:
                     end_game()
 
@@ -296,10 +215,6 @@ def remove():
     if gfw.world.count_at(gfw.layer.stairs) > 12:
         gfw.world.remove(gfw.layer.stairs)
         gfw.world.empty_trashcan()
-        # print('================================================')
-        # print(gfw.world.count_at(gfw.layer.stairs))
-        # print('================================================')
-
 def exit():
     global music_bg, wav_step_up, gameover_bg
     del music_bg

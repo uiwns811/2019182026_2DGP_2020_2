@@ -9,7 +9,7 @@ class Player:
 
     #constructor
     def __init__(self):
-        self.pos = get_canvas_width() // 2, 200
+        self.pos = get_canvas_width() // 2, 190
         self.delta = 0, 0
         self.speed = 200
         # 게임 시작 전 character_standard와 character_clock이 번갈아 나타나도록 구현
@@ -47,15 +47,11 @@ class Player:
 
     def get_bb(self):
         x, y = self.pos
-        return x - self.width//2, y - self.height//2, x + self.width//2, y + self.height//2
+        return x - self.width // 2, y - self.height // 2 , x + self.width // 2, y + self.height // 2
 
     def reset(self):
-        self.pos = get_canvas_width() - 100, 200
+        self.pos = get_canvas_width() // 2, 200
         self.image = gfw.image.load(gobj.res('/character_std.png'))
-        self.left = self.pos[0] - self.image.w // 2
-        self.bottom = self.pos[1] - self.image.h // 2
-        self.right = self.left + self.image.w
-        self.top = self.bottom + self.image.h
 
     def move_left(self):
         x, y = self.pos
@@ -70,6 +66,12 @@ class Player:
     def move(self):
         x, y = self.pos
         y += self.stair_image.h
+        self.pos = x, y
+
+    def dead_player(self):
+        x, y = self.pos
+        dy = 500
+        y -= dy * gfw.delta_time
         self.pos = x, y
 
     def handle_event(self, e):

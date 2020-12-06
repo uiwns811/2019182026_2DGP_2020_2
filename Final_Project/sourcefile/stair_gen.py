@@ -1,9 +1,10 @@
 from pico2d import *
 import gfw
-from stair import Stair
+from stair import *
 import random
 
 STAIR_COUNT = 13
+ITEM_COUNT = 2
 
 SPEED_PPS = 3000
 MAG_SPEED = 0.15
@@ -40,11 +41,13 @@ def get_xy(prev):
 def update():
     while gfw.world.count_at(gfw.layer.stairs) < STAIR_COUNT:
         generate()
+    while gfw.world.count_at(gfw.layer.item) < ITEM_COUNT:
+        generate_item()
         
 def generate():
     x, y, stair_ylevel, xdirection = get_coords()
-    print()
     s = Stair((x,y), stair_ylevel, xdirection)     # pos, delta가 인자이므로 튜플로 묶어서 전달
+    s.draw()
     gfw.world.add(gfw.layer.stairs, s)
 
 def sub_generate(pos):
@@ -53,9 +56,14 @@ def sub_generate(pos):
     s = Stair(pos, 13, xdirection)
     gfw.world.add(gfw.layer.stairs, s)
 
+def generate_item():
+    x, y, item_ylevel, xdirection = get_coords()
+    c = Coin((x,y), item_ylevel)
+    gfw.world.add(gfw.layer.item, c)
+
 def get_coords():           # 좌표를 생성하는 함수를 만들자.. missile말고 item도 만들건데 생성되는 x, y, dx, dy를 결정하는게 따로 필요.
     global stair_level, prev_index, cur_index
-    image = gfw.image.load('../res/image/stairs.png')
+    image = gfw.image.load('res/image/stairs.png')
     xdirection = random.randint(0, 1)      # 계단의 생성 방향 결정
 
     if stair_level == 3:
