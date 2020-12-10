@@ -202,9 +202,9 @@ __이후는 추후에 구현할 예정입니다.__
 ---
 
 #### 12. 발표 영상 링크
-	[1차 발표 영상] : https://youtu.be/GvYK3BQe84c    
-	[2차 발표 영상] : https://youtu.be/sHG5T2WkOoA      
-	[3차 발표 영상] : https://youtu.be/ZXV9nBNoVaw     
+https://youtu.be/GvYK3BQe84c (1차 발표)     
+https://youtu.be/sHG5T2WkOoA  (2차 발표)     
+https://youtu.be/Pgo35iPWNok (3차 발표)     
 	
 #### 13. 개발 진척도
 |내용|목표 범위|완료 범위|진척도|
@@ -230,3 +230,5 @@ __이후는 추후에 구현할 예정입니다.__
 |Week of Nov 29|9|
 |Week of Dec 6|5|
 
+#### 15. 지인 플레이 영상
+https://youtu.be/hAVBBITHEaE
